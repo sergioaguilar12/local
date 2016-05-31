@@ -1,0 +1,250 @@
+<!-DOCTYPE HTML-->
+<html>
+<head>
+    <title>Cliente Local</title>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.css" type="text/css"/>
+<link rel="stylesheet" href="css/jquery.mobile.theme-1.4.5.min.css" type="text/css"  />
+<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css" type="text/css" />
+
+<script type="text/javascript" src="phonegap.js"></script>
+<script type="text/javascript" src="js/jquery-2.2.0.min.js" ></script>
+<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js" ></script>
+
+<script >
+    
+   
+    
+    $(document).on("ready", function(){
+        //alert("probando jquery");
+        $("#cbOpciones").change(function(){
+            //alert("Cambio de opccion");
+           // var seleccion= $("#cbOpciones option:selected").val();
+            //$("#txt1").val(seleccion);
+            //alert("Cambio de opccion"+seleccion);
+            var seleccion= $("#cbOpciones option:selected").text();
+            $("#txt1").val(seleccion);
+            //$("#cbOpcionesT").css("display","block");
+            //alert("Cambio de opccion"+seleccion);
+        });
+        $("#cbOpcionesT").change(function(){
+            var seleccion= $("#cbOpcionesT option:selected").text();
+            $("#txt2").val(seleccion);
+            //alert("Cambio de opccion"+seleccion);
+        });
+        $("#cbOpcionesB").change(function(){
+            var seleccion= $("#cbOpcionesB option:selected").text();
+            $("#txt3").val(seleccion);
+            //alert("Cambio de opccion"+seleccion);
+        });
+        $('#sumar').on('click', function(){
+            resultado = 0;
+            $('select').each(function(){
+                resultado += ($(this).val())*1
+            });
+            $('#cajaresult').val(resultado);
+        });
+        
+        $("#btnEnviar").tap(function env(){
+                   // alert("Empesamos con las Alertas jijijij"); 
+                    var nom=$("#txtnombre").val();
+                    var msa=$("#txtMesa").val();
+                    var rfc=$("#txtRFC").val();    
+                    var pza=$("#txt1").val();
+                    var tno=$("#txt2").val();
+                    var bda=$("#txt3").val();
+                    var sma=$("#cajaresult").val();
+                    
+                   if(nom==""){
+                        $("#mensaje1").fadeIn("slow");
+                        return false;
+                    }else {
+                        $("#mensaje1").fadeOut();
+                    }
+                   if(msa==""){
+                            $("#mensaje2").fadeIn("slow");
+                            return false;
+                        }else{
+                            $("#mensaje2").fadeOut();
+                        }
+                    if(pza==""){
+                                $("#mensaje3").fadeIn("slow");
+                                return false;
+                            }else{
+                                $("#mensaje3").fadeOut();
+                            }
+                            
+                    if(tno==""){
+                        $("#mensaje4").fadeIn("slow");
+                                    return false;
+                                }else{
+                                    $("#mensaje4").fadeOut();
+                                }
+                    if(bda==""){
+                        $("#mensaje5").fadeIn("slow");
+                        return false;
+                    }else{
+                        $("#mensaje5").fadeOut();
+                    }
+                    if(sma==""){
+                        $("#mensaje5").fadeIn("slow");
+                        return false;
+                        }else{
+                            $("#mensaje5").fadeOut();
+                            alert("Se enviaran los datos: Nombre: "+nom+" Numero de Mesa: "+msa+" RFC: "+rfc+" Pizza: "+pza+" Tamaño: "+tno+" bebida: "+bda+" pagar un total de: "+sma);
+                            $.ajax({
+                                type:"POST",
+                                url:"http://pizzerielcoyote.esy.es/guardarLocal.php",
+                                data:"nomb="+nom+"&mesa="+msa+"&rf="+rfc+"&pzza="+pza+"&tam="+tno+"&beb="+bda+"&sum="+sma,
+                                success: exitoso
+                            });
+                            function exitoso(datos){
+                                alert("Respuesta: "+datos);
+                            }
+                        }
+                    location.reload()
+                });
+    });
+
+</script>
+
+
+
+
+
+<style type="text/css">
+#encabezado{
+text-align:center;
+font-size: 14px;
+color:red;
+font-weight:bold;
+}
+#pie{
+
+text-align:center;
+font-size:8px;
+color:green;
+font-weight:bold;
+}
+
+#global {
+	height: 500px;
+	width: 470px;
+	border: 1px solid #ddd;
+	background: #f1f1f1;
+	overflow-y: scroll;
+}
+.errores{
+      -webkit-boxshadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      background: red;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      color: #fff;
+      display: none;
+      font-size: 14px;
+      margin-top: -50px;
+      margin-left: 180px;
+      padding: 10px;
+      position: absolute;
+}
+     // #cbOpcionesT{
+     //     display: none;
+     // }
+</style>
+</head>
+<body>
+    
+    <div data-role="page" id="principal" data-theme="a">
+	<div data-role="header">
+		<h1>Cliente Local</h1>
+	</div>
+<div id="global">
+	<div data-role="content">
+            <form id="miFormulario" method="GET">
+            <div id="mensaje1" class="errores">Escriba su nombre</div>
+            <div id="mensaje2" class="errores">Digite Núm mesa</div>
+            <div id="mensaje3" class="errores">Escoja su pizza</div>
+            <div id="mensaje4" class="errores">Escoja el tamaño deseado</div>
+            <div id="mensaje5" class="errores">Escoja Su bebida</div>
+            <div id="mensaje3" class="errores">Precione Btn Sumar</div>
+                
+            <div>
+                <input type="text" value="" placeholder="Escriba su nombre" id="txtnombre" required title="Ejemplo: Nombre Apellidom Apellidop"/>
+                
+                <input type="number" value="" placeholder="Digite el Número de su mesa" id="txtMesa" min="01" max="99" step="1" required />
+                
+                <input type="text" value="" placeholder="Si desea factura escriva su RFC" id="txtRFC" pattern="[A-Za-z]{4}[0-9]{6}[A-Za-z0-9]{3}" title="formato: ABCD123456DE3"/>
+                
+            </div>
+
+            <div id="cbOpciones">
+            <select>
+                <option > Seleccione Pizza</option>
+                <option value="0"> Queso y pepperoni</option>
+                <option value="2"> Jamón y palmitos</option>
+                <option value="3"> Margherita</option>
+                <option value="4"> Hawaiana</option>
+                <option value="5"> Pollo</option>
+                <option value="6"> Jamón y panceta</option>
+                <option value="7"> Napolitana</option>
+                <option value="8"> Pizza 4 quesos</option>
+                <option value="9"> Huevo y tocino</option>
+                <option value="1"> Salmón ahumado y queso crema</option>
+                <option value="0"> Ninguno</option>
+            </select>
+            </div>
+            
+            <div id="cbOpcionesT">
+            <select>
+                <option > Seleccione Tamaño</option>
+                <option value="100"> Grande</option>
+                <option value="70"> Mediana</option>
+                <option value="40"> Chica</option>
+                <option value="11"> Revanada</option>
+                <option value="0">Ninguno</option>
+            </select>
+            </div>
+            
+            <div id="cbOpcionesB">
+            <select>
+                <option > Seleccione Su bebida</option>
+                <option value="30"> Coca cola</option>
+                <option value="20"> Agua mineral</option>
+                <option value="18"> Cerveza Sol</option>
+                <option value="17"> Cerveza Indio</option>
+                <option value="25"> Pepsi</option>
+                <option value="28"> Tinto de verano</option>
+                <option value="23"> Fanta Naranja</option>
+                <option value="19"> Kas</option>
+                <option value="29"> Zumo de naranja</option>
+                <option value="13"> Trina</option>
+                <option value="35"> Red bull</option>
+                <option value="40"> Bebida isotónica</option>
+                <option value="0"> Ninguno</option>
+            </select>
+            </div>
+            <div>
+            <input type="text" id="txt1" readonly="readonly" required>
+            <input type="text" id="txt2" readonly="readonly" required>
+            <input type="text" id="txt3" readonly="readonly" required>
+            <input type="button" name="miboton4" value="sumar" id="sumar"/>
+            <input type="text" name="cajaresult" id="cajaresult" value="" readonly="readonly" required/>
+            
+            <input type="submit" value="Ordenar" id="btnEnviar" />
+            </div>
+                
+            </form>
+
+    </div>
+            
+         
+	<div data-role="footer">
+            <p>Gracias por su compra</p>
+            <a href="http://facebook.com" class="ui-btn">Facebook</a>
+            <a href="http://twitter.com" class="ui-btn">Twitter</a>
+	</div>
+</div>   
+</div>   
+
+</body>
+</html>
